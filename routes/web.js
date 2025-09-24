@@ -7,8 +7,13 @@ web.get('/',(req,res)=>{
 })
 
 web.get('/:username',(req,res)=>{
-    res.render('public-profile')
+    const username = req.params.username
+    res.render('public-profile',{
+        title : username,
+        username : username,
+        bio : "Hi Iscarions"
 
+    })
 })
 
 export default web
