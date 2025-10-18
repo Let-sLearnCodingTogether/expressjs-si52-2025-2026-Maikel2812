@@ -1,5 +1,7 @@
 import UserModel from "../models/userModel.js";
-export const register = async (req, res) => {}
+import {compare,hash} from "../utils/hashUtil.js";
+import { jwtSignUtil } from "../utils/jwtSignUtil.js";
+export const register = async (req, res) => {
     try {
         const registerData=req.body
         console.log(registerData);
@@ -17,11 +19,12 @@ export const register = async (req, res) => {}
         })
     }
     catch(e) {
-        es.status(500).json ({
+        res.status(500).json ({
             massage : e.massage,
             data : null
     })
     }
+}
     export const login = async(req,res)=>{
         try{
             const loginData = req.body
@@ -44,6 +47,17 @@ export const register = async (req, res) => {}
                     }
                 })
             }
+
+            if(compare(loginData.password, user.password)){
+                return res.status(200).json({
+                    message : "Login Berhasil",
+                    data : {
+                        username : user.username,
+                        email : user.email,
+                        token : jwtSignUtil(user)
+                    }
+                })
+            }
             return res.status(401).json({
                 message : "Login gagal",
                 data : null
@@ -56,3 +70,4 @@ export const register = async (req, res) => {}
             })
         }
     }
+
